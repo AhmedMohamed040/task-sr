@@ -1,10 +1,11 @@
 'use client';
-// https://github.com/andreizanik/-next#readme
+
 import { useMemo, useEffect, useReducer, useCallback } from 'react';
+
 import axios, { endpoints } from 'src/utils/axios';
-import { logUserIn, logUserOut } from 'src/actions/auth-methods';
-import { setCookie, getCookie } from 'cookies-next';
+
 import { AuthContext } from './auth-context';
+import { setSession, isValidToken } from './utils';
 import { AuthUserType, ActionMapType, AuthStateType } from '../../types';
 
 // ----------------------------------------------------------------------
@@ -74,8 +75,7 @@ const reducer = (state: AuthStateType, action: ActionsType) => {
 
 // ----------------------------------------------------------------------
 
-const STORAGE_KEY = 'session';
-const STORAGE_USER = 'user';
+const STORAGE_KEY = 'accessToken';
 
 type Props = {
   children: React.ReactNode;
@@ -85,21 +85,35 @@ export function AuthProvider({ children }: Props) {
   const [state, dispatch] = useReducer(reducer, initialState);
 
   const initialize = useCallback(async () => {
-    const access_token = getCookie('session') || '';
-    const storedUser = getCookie('user') || '';
-    let user;
-    if (storedUser) {
-      user = JSON.parse(storedUser);
-    }
+    try {
+      const accessToken = sessionStorage.getItem(STORAGE_KEY);
 
-    if (access_token && user) {
-      dispatch({
-        type: Types.INITIAL,
-        payload: {
-          user,
-        },
-      });
-    } else {
+      if (accessToken && isValidToken(accessToken)) {
+        setSession(accessToken);
+
+        const res = await axios.get(endpoints.auth.me);
+
+        const { user } = res.data;
+
+        dispatch({
+          type: Types.INITIAL,
+          payload: {
+            user: {
+              ...user,
+              accessToken,
+            },
+          },
+        });
+      } else {
+        dispatch({
+          type: Types.INITIAL,
+          payload: {
+            user: null,
+          },
+        });
+      }
+    } catch (error) {
+      console.error(error);
       dispatch({
         type: Types.INITIAL,
         payload: {
@@ -114,21 +128,24 @@ export function AuthProvider({ children }: Props) {
   }, [initialize]);
 
   // LOGIN
-  const login = useCallback(async (username: string, password: string) => {
+  const login = useCallback(async (email: string, password: string) => {
     const data = {
-      username,
+      email,
       password,
     };
 
-    const res = await logUserIn(data);
-    const user = res?.data || {};
+    const res = await axios.post(endpoints.auth.login, data);
+
+    const { accessToken, user } = res.data;
+
+    setSession(accessToken);
 
     dispatch({
       type: Types.LOGIN,
       payload: {
         user: {
           ...user,
-          access_token: res?.data.access_token,
+          accessToken,
         },
       },
     });
@@ -146,21 +163,16 @@ export function AuthProvider({ children }: Props) {
 
       const res = await axios.post(endpoints.auth.register, data);
 
-      const { access_token, user } = res.data;
+      const { accessToken, user } = res.data;
 
-      //    sessionStorage.setItem(STORAGE_KEY, access_token);
-      setCookie(STORAGE_KEY, access_token, {
-        sameSite: 'strict',
-        secure: true,
-        maxAge: 120000 /* 3days in mili s */,
-      });
+      sessionStorage.setItem(STORAGE_KEY, accessToken);
 
       dispatch({
         type: Types.REGISTER,
         payload: {
           user: {
             ...user,
-            access_token,
+            accessToken,
           },
         },
       });
@@ -170,7 +182,7 @@ export function AuthProvider({ children }: Props) {
 
   // LOGOUT
   const logout = useCallback(async () => {
-    await logUserOut();
+    setSession(null);
     dispatch({
       type: Types.LOGOUT,
     });

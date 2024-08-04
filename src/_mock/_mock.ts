@@ -1,5 +1,7 @@
 import { sub } from 'date-fns';
 
+import { ASSETS_API } from 'src/config-global';
+
 import {
   _id,
   _ages,
@@ -28,7 +30,6 @@ import {
 } from './assets';
 
 // ----------------------------------------------------------------------
-const  ASSETS_API  = 'https://api-prod-minimal-v510.vercel.app';
 
 export const _mock = {
   id: (index: number) => _id[index],

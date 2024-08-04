@@ -11,7 +11,7 @@ import { bgBlur } from 'src/theme/css';
 import Scrollbar from 'src/components/scrollbar';
 import { NavSectionHorizontal } from 'src/components/nav-section';
 
-import { HEADER } from '../../locales/config-layout';
+import { HEADER } from '../config-layout';
 import { useNavData } from './config-navigation';
 import HeaderShadow from '../common/header-shadow';
 

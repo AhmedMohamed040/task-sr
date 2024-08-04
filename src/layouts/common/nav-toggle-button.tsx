@@ -8,7 +8,7 @@ import { bgBlur } from 'src/theme/css';
 import Iconify from 'src/components/iconify';
 import { useSettingsContext } from 'src/components/settings';
 
-import { NAV } from '../../locales/config-layout';
+import { NAV } from '../config-layout';
 
 // ----------------------------------------------------------------------
 

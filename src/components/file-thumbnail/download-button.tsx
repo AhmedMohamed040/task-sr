@@ -19,10 +19,10 @@ export default function DownloadButton({ onDownload }: Props) {
       onClick={onDownload}
       sx={{
         p: 0,
-        top: "55%",
+        top: 0,
         right: 0,
         width: 1,
-        height: '70px',
+        height: 1,
         zIndex: 9,
         opacity: 0,
         position: 'absolute',

@@ -19,11 +19,13 @@ export const paths = {
   // DASHBOARD
   dashboard: {
     root: ROOTS.DASHBOARD,
-    sports: `${ROOTS.DASHBOARD}/sports-activities`,
-    subscription: `${ROOTS.DASHBOARD}/subscription-packages`,
-    ManageSubscriberAccounts: `${ROOTS.DASHBOARD}/manage-subscriber-accounts`,
-    reportsStatistics: `${ROOTS.DASHBOARD}/reports-statistics`,
-    support: `${ROOTS.DASHBOARD}/support`,
-    notifications: `${ROOTS.DASHBOARD}/notifications`
+    one: `${ROOTS.DASHBOARD}/one`,
+    two: `${ROOTS.DASHBOARD}/two`,
+    three: `${ROOTS.DASHBOARD}/three`,
+    group: {
+      root: `${ROOTS.DASHBOARD}/group`,
+      five: `${ROOTS.DASHBOARD}/group/five`,
+      six: `${ROOTS.DASHBOARD}/group/six`,
+    },
   },
 };

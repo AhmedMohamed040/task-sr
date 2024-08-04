@@ -41,8 +41,7 @@ function Group({ subheader, items, slotProps }: NavGroupProps) {
 
   return (
     <Stack sx={{ px: 2 }}>
-      {renderContent}
-      {/* {subheader ? (
+      {subheader ? (
         <>
           <ListSubheader
             disableGutters
@@ -73,7 +72,7 @@ function Group({ subheader, items, slotProps }: NavGroupProps) {
         </>
       ) : (
         renderContent
-      )} */}
+      )}
     </Stack>
   );
 }

@@ -14,7 +14,7 @@ import SvgColor from 'src/components/svg-color';
 import { useSettingsContext } from 'src/components/settings';
 
 import Searchbar from '../common/searchbar';
-import { NAV, HEADER } from '../../locales/config-layout';
+import { NAV, HEADER } from '../config-layout';
 import SettingsButton from '../common/settings-button';
 import AccountPopover from '../common/account-popover';
 import ContactsPopover from '../common/contacts-popover';
@@ -63,9 +63,9 @@ export default function Header({ onOpenNav }: Props) {
       >
         <LanguagePopover />
 
-     {/*    <NotificationsPopover /> */}
+        <NotificationsPopover />
 
-       {/*  <ContactsPopover /> */}
+        <ContactsPopover />
 
         <SettingsButton />
 

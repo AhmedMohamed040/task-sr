@@ -1,4 +1,3 @@
-import { t } from 'i18next';
 import parse from 'autosuggest-highlight/parse';
 import match from 'autosuggest-highlight/match';
 import { memo, useState, useCallback } from 'react';
@@ -112,6 +111,8 @@ function Searchbar() {
       <IconButton onClick={search.onTrue}>
         <Iconify icon="eva:search-fill" />
       </IconButton>
+
+      {lgUp && <Label sx={{ px: 0.75, fontSize: 12, color: 'text.secondary' }}>⌘K</Label>}
     </Stack>
   );
 
@@ -144,7 +145,7 @@ function Searchbar() {
           <InputBase
             fullWidth
             autoFocus
-            placeholder={t('search')}
+            placeholder="Search..."
             value={searchQuery}
             onChange={handleSearch}
             startAdornment={

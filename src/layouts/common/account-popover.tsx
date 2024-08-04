@@ -8,7 +8,6 @@ import { alpha } from '@mui/material/styles';
 import MenuItem from '@mui/material/MenuItem';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
-import { getCookie } from 'cookies-next';
 
 import { useRouter } from 'src/routes/hooks';
 
@@ -18,32 +17,30 @@ import { useAuthContext } from 'src/auth/hooks';
 
 import { varHover } from 'src/components/animate';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
-import { t } from 'i18next';
 
 // ----------------------------------------------------------------------
 
 const OPTIONS = [
   {
-    label: "Home",
+    label: 'Home',
     linkTo: '/',
   },
- /*  {
+  {
     label: 'Profile',
     linkTo: '/#1',
   },
   {
     label: 'Settings',
     linkTo: '/#2',
-  }, */
+  },
 ];
 
 // ----------------------------------------------------------------------
 
 export default function AccountPopover() {
   const router = useRouter();
-  const getUser = getCookie('user');
-  const user = getUser && JSON.parse(getUser as string);
 
+  const { user } = useMockedUser();
 
   const { logout } = useAuthContext();
 
@@ -83,8 +80,8 @@ export default function AccountPopover() {
         }}
       >
         <Avatar
-          src={user?.avatar}
-          alt={user?.name || t("Unknown")}
+          src={user?.photoURL}
+          alt={user?.displayName}
           sx={{
             width: 36,
             height: 36,
@@ -98,7 +95,7 @@ export default function AccountPopover() {
       <CustomPopover open={popover.open} onClose={popover.onClose} sx={{ width: 200, p: 0 }}>
         <Box sx={{ p: 2, pb: 1.5 }}>
           <Typography variant="subtitle2" noWrap>
-            {user?.name || t("Unknown")}
+            {user?.displayName}
           </Typography>
 
           <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
@@ -111,7 +108,7 @@ export default function AccountPopover() {
         <Stack sx={{ p: 1 }}>
           {OPTIONS.map((option) => (
             <MenuItem key={option.label} onClick={() => handleClickItem(option.linkTo)}>
-              {t(option.label)}
+              {option.label}
             </MenuItem>
           ))}
         </Stack>
@@ -122,7 +119,7 @@ export default function AccountPopover() {
           onClick={handleLogout}
           sx={{ m: 1, fontWeight: 'fontWeightBold', color: 'error.main' }}
         >
-          {t("Logout")}
+          Logout
         </MenuItem>
       </CustomPopover>
     </>

@@ -1,26 +1,34 @@
 'use client';
+
 import * as Yup from 'yup';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
+
+import Link from '@mui/material/Link';
 import Alert from '@mui/material/Alert';
 import Stack from '@mui/material/Stack';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import LoadingButton from '@mui/lab/LoadingButton';
 import InputAdornment from '@mui/material/InputAdornment';
+
+import { paths } from 'src/routes/paths';
+import { RouterLink } from 'src/routes/components';
 import { useRouter, useSearchParams } from 'src/routes/hooks';
+
 import { useBoolean } from 'src/hooks/use-boolean';
+
 import { useAuthContext } from 'src/auth/hooks';
+import { PATH_AFTER_LOGIN } from 'src/config-global';
+
 import Iconify from 'src/components/iconify';
 import FormProvider, { RHFTextField } from 'src/components/hook-form';
-import { t } from 'i18next';
-import { PATH_AFTER_LOGIN } from 'src/config-global';
 
 // ----------------------------------------------------------------------
 
 export default function JwtLoginView() {
-  const { login, user } = useAuthContext();
+  const { login } = useAuthContext();
 
   const router = useRouter();
 
@@ -33,13 +41,13 @@ export default function JwtLoginView() {
   const password = useBoolean();
 
   const LoginSchema = Yup.object().shape({
-    username: Yup.string().required('User name is required'), // .email('Email must be a valid email address'),
+    email: Yup.string().required('Email is required').email('Email must be a valid email address'),
     password: Yup.string().required('Password is required'),
   });
 
   const defaultValues = {
-    username: 'admin@admin.com',
-    password: 'Aa123456@',
+    email: 'demo@minimals.cc',
+    password: 'demo1234',
   };
 
   const methods = useForm({
@@ -55,38 +63,37 @@ export default function JwtLoginView() {
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      await login(data.username, data.password);
+      await login?.(data.email, data.password);
 
       router.push(returnTo || PATH_AFTER_LOGIN);
     } catch (error) {
       console.error(error);
       reset();
-      setErrorMsg(t('Invalid username or password'));
-      //   setErrorMsg(typeof error === 'string' ? error : error.message);
+      setErrorMsg(typeof error === 'string' ? error : error.message);
     }
   });
 
   const renderHead = (
     <Stack spacing={2} sx={{ mb: 5 }}>
-      <Typography variant="h4">{t('Sign in to 49-academy')}</Typography>
+      <Typography variant="h4">Sign in to Minimal</Typography>
 
-      {/* <Stack direction="row" spacing={0.5}>
+      <Stack direction="row" spacing={0.5}>
         <Typography variant="body2">New user?</Typography>
 
         <Link component={RouterLink} href={paths.auth.jwt.register} variant="subtitle2">
           Create an account
         </Link>
-      </Stack> */}
+      </Stack>
     </Stack>
   );
 
   const renderForm = (
     <Stack spacing={2.5}>
-      <RHFTextField name="username" label={t('Email')} />
+      <RHFTextField name="email" label="Email address" />
 
       <RHFTextField
         name="password"
-        label={t('Password')}
+        label="Password"
         type={password.value ? 'text' : 'password'}
         InputProps={{
           endAdornment: (
@@ -99,9 +106,9 @@ export default function JwtLoginView() {
         }}
       />
 
-      {/* <Link variant="body2" color="inherit" underline="always" sx={{ alignSelf: 'flex-end' }}>
+      <Link variant="body2" color="inherit" underline="always" sx={{ alignSelf: 'flex-end' }}>
         Forgot password?
-      </Link> */}
+      </Link>
 
       <LoadingButton
         fullWidth
@@ -111,7 +118,7 @@ export default function JwtLoginView() {
         variant="contained"
         loading={isSubmitting}
       >
-        {t('Login')}
+        Login
       </LoadingButton>
     </Stack>
   );
@@ -120,9 +127,9 @@ export default function JwtLoginView() {
     <>
       {renderHead}
 
-      {/*  <Alert severity="info" sx={{ mb: 3 }}>
-        Use User name : <strong>admin@admin.com</strong> / password :<strong> Aa123456@</strong>
-      </Alert> */}
+      <Alert severity="info" sx={{ mb: 3 }}>
+        Use email : <strong>demo@minimals.cc</strong> / password :<strong> demo1234</strong>
+      </Alert>
 
       {!!errorMsg && (
         <Alert severity="error" sx={{ mb: 3 }}>

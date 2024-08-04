@@ -18,7 +18,7 @@ export const _userAbout = {
   country: countries[1].label,
   school: _mock.companyName(2),
   company: _mock.companyName(1),
-  coverUrl: _mock.image.cover(5),
+  coverUrl: _mock.image.cover(3),
   totalFollowers: _mock.number.nativeL(1),
   totalFollowing: _mock.number.nativeL(2),
   quote:

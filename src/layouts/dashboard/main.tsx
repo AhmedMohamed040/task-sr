@@ -4,7 +4,7 @@ import { useResponsive } from 'src/hooks/use-responsive';
 
 import { useSettingsContext } from 'src/components/settings';
 
-import { NAV, HEADER } from '../../locales/config-layout';
+import { NAV, HEADER } from '../config-layout';
 
 // ----------------------------------------------------------------------
 

@@ -1,6 +1,3 @@
-
-import { getCookies, setCookie, deleteCookie, getCookie } from 'cookies-next';
-
 import { paths } from 'src/routes/paths';
 
 import axios from 'src/utils/axios';
@@ -23,12 +20,12 @@ function jwtDecode(token: string) {
 
 // ----------------------------------------------------------------------
 
-export const isValidToken = (access_token: string) => {
-  if (!access_token) {
+export const isValidToken = (accessToken: string) => {
+  if (!accessToken) {
     return false;
   }
 
-  const decoded = jwtDecode(access_token);
+  const decoded = jwtDecode(accessToken);
 
   const currentTime = Date.now() / 1000;
 
@@ -43,18 +40,16 @@ export const tokenExpired = (exp: number) => {
 
   const currentTime = Date.now();
 
-  // Test token expires after day
+  // Test token expires after 10s
   // const timeLeft = currentTime + 10000 - currentTime; // ~10s
-  const timeLeft = exp * 1000 - currentTime
+  const timeLeft = exp * 1000 - currentTime;
 
   clearTimeout(expiredTimer);
 
   expiredTimer = setTimeout(() => {
     alert('Token expired');
 
-  //  sessionStorage.removeItem('access_token');
-   deleteCookie('access_token');
-
+    sessionStorage.removeItem('accessToken');
 
     window.location.href = paths.auth.jwt.login;
   }, timeLeft);
@@ -62,18 +57,18 @@ export const tokenExpired = (exp: number) => {
 
 // ----------------------------------------------------------------------
 
-export const setSession = (access_token: string | null) => {
-  if (access_token) {
-    //  sessionStorage.setItem('access_token', access_token);
-      setCookie('access_token', access_token , { secure: true,  maxAge: 259200000});
-     axios.defaults.headers.common.Authorization = `Bearer ${access_token}`;
+export const setSession = (accessToken: string | null) => {
+  if (accessToken) {
+    sessionStorage.setItem('accessToken', accessToken);
+
+    axios.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
 
     // This function below will handle when token is expired
-    const { exp } = jwtDecode(access_token); // ~3 days by minimals server
- //   tokenExpired(exp);
+    const { exp } = jwtDecode(accessToken); // ~3 days by minimals server
+    tokenExpired(exp);
   } else {
-    deleteCookie('access_token');
-  //  sessionStorage.removeItem('access_token');
+    sessionStorage.removeItem('accessToken');
+
     delete axios.defaults.headers.common.Authorization;
   }
 };

@@ -10,7 +10,7 @@ import { bgBlur } from 'src/theme/css';
 
 import Logo from 'src/components/logo';
 
-import { HEADER } from '../../locales/config-layout';
+import { HEADER } from '../config-layout';
 import HeaderShadow from './header-shadow';
 import SettingsButton from './settings-button';
 

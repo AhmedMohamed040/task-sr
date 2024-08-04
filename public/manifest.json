@@ -1,6 +1,6 @@
 {
-  "name": "49-academy",
-  "short_name": "49-academy",
+  "name": "Minimal UI",
+  "short_name": "Minimal UI",
   "display": "standalone",
   "start_url": "/",
   "theme_color": "#000000",

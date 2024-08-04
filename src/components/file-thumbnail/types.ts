@@ -2,6 +2,6 @@
 
 export interface ExtendFile extends File {
   preview?: string;
-  url?: string;
+  path?: string;
   lastModifiedDate?: string;
 }

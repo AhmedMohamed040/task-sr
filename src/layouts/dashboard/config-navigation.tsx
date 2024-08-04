@@ -31,7 +31,6 @@ const ICONS = {
   banking: icon('ic_banking'),
   booking: icon('ic_booking'),
   invoice: icon('ic_invoice'),
-  sports: icon('ic_sports'),
   product: icon('ic_product'),
   calendar: icon('ic_calendar'),
   disabled: icon('ic_disabled'),
@@ -40,11 +39,6 @@ const ICONS = {
   ecommerce: icon('ic_ecommerce'),
   analytics: icon('ic_analytics'),
   dashboard: icon('ic_dashboard'),
-  home: icon('ic_home'),
-  users: icon('ic_users'),
-  statistics: icon('ic_statistics'),
-  support: icon('ic_support'),
-  admin: icon('ic_admin'),
 };
 
 // ----------------------------------------------------------------------
@@ -55,38 +49,33 @@ export function useNavData() {
       // OVERVIEW
       // ----------------------------------------------------------------------
       {
-        // subheader: 'overview v5.7.0',
-        subheader: '',
+        subheader: 'overview v5.7.0',
         items: [
-          { title: 'Induction Site', path: paths.dashboard.root, icon: ICONS.home },
+          { title: 'one', path: paths.dashboard.root, icon: ICONS.dashboard },
+          { title: 'two', path: paths.dashboard.two, icon: ICONS.ecommerce },
           {
-            title: 'Manage sports activities',
-            path: paths.dashboard.sports,
-            icon: ICONS.sports,
+            title: 'three',
+            path: paths.dashboard.three,
+            icon: ICONS.analytics,
           },
+        ],
+      },
+
+      // MANAGEMENT
+      // ----------------------------------------------------------------------
+      {
+        subheader: 'management',
+        items: [
           {
-            title: 'Manage subscription packages',
-            path: paths.dashboard.subscription,
-            icon: ICONS.invoice,
+            title: 'user',
+            path: paths.dashboard.group.root,
+            icon: ICONS.user,
+            children: [
+              { title: 'four', path: paths.dashboard.group.root },
+              { title: 'five', path: paths.dashboard.group.five },
+              { title: 'six', path: paths.dashboard.group.six },
+            ],
           },
-          {
-            title: 'Manage subscriber accounts',
-            path: paths.dashboard.ManageSubscriberAccounts,
-            icon: ICONS.users,
-          },
-          { title: 'Reports & Statistics', path: paths.dashboard.reportsStatistics, icon: ICONS.analytics },
-          {
-            title: 'Manage notifications and alerts',
-            path: paths.dashboard.notifications,
-            icon: ICONS.chat,
-          },
-          { title: 'Technical Support', path: paths.dashboard.support, icon: ICONS.support },
-          {
-            title: 'Manage administrator accounts',
-            path: '/null',
-            icon: ICONS.admin,
-          },
-          { title: 'Blog', path: '/null', icon: ICONS.blog },
         ],
       },
     ],

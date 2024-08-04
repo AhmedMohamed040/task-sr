@@ -8,7 +8,7 @@ import { hideScroll } from 'src/theme/css';
 import Logo from 'src/components/logo';
 import { NavSectionMini } from 'src/components/nav-section';
 
-import { NAV } from '../../locales/config-layout';
+import { NAV } from '../config-layout';
 import { useNavData } from './config-navigation';
 import NavToggleButton from '../common/nav-toggle-button';
 

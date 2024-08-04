@@ -141,7 +141,7 @@ export function fileData(file: ExtendFile | string) {
     key: file.preview,
     name: file.name,
     size: file.size,
-    path: file.url,
+    path: file.path,
     type: file.type,
     preview: file.preview,
     lastModified: file.lastModified,
