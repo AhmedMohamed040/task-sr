@@ -22,9 +22,9 @@ export const viewport = {
 };
 
 export const metadata = {
-  title: 'Minimal UI Kit',
+  title: 'FMSCA UI Kit',
   description:
-    'The starting point for your next project with Minimal UI Kit, built on the newest version of Material-UI ©, ready to be customized to your style',
+    'The starting point for your next project with FMSCA UI Kit, built on the newest version of Material-UI ©, ready to be customized to your style',
   keywords: 'react,material,kit,application,dashboard,admin,template',
   manifest: '/manifest.json',
   icons: [
@@ -46,9 +46,9 @@ export default function RootLayout({ children }: Props) {
         <AuthProvider>
           <SettingsProvider
             defaultSettings={{
-              themeMode: 'light', // 'light' | 'dark'
+              themeMode: 'dark', // 'light' | 'dark'
               themeDirection: 'ltr', //  'rtl' | 'ltr'
-              themeContrast: 'default', // 'default' | 'bold'
+              themeContrast: 'bold', // 'default' | 'bold'
               themeLayout: 'vertical', // 'vertical' | 'horizontal' | 'mini'
               themeColorPresets: 'default', // 'default' | 'cyan' | 'purple' | 'blue' | 'orange' | 'red'
               themeStretch: false,
