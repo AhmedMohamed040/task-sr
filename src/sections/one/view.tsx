@@ -86,6 +86,12 @@ export default function OneView() {
                 {item?.physical_address || "None"}
               </Typography>
             ),
+            mc_mx_ff_number: (item) => (
+              <Typography variant="overline"
+              >
+                {item?.mc_mx_ff_number || "None"}
+              </Typography>
+            ),
             dba_name: (item) => (
               <Typography variant="overline"
               >

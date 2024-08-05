@@ -46,52 +46,6 @@ export default function NextAppDirEmotionCacheProvider(props: NextAppDirEmotionC
     return { cache, flush };
   });
 
-  useServerInsertedHTML(() => {
-    const inserted = registry.flush();
-    if (inserted.length === 0) {
-      return null;
-    }
-    let styles = '';
-    let dataEmotionAttribute = registry.cache.key;
-
-    const globals: {
-      name: string;
-      style: string;
-    }[] = [];
-
-    inserted.forEach(({ name, isGlobal }) => {
-      const style = registry.cache.inserted[name];
-
-      if (typeof style !== 'boolean') {
-        if (isGlobal) {
-          globals.push({ name, style });
-        } else {
-          styles += style;
-          dataEmotionAttribute += ` ${name}`;
-        }
-      }
-    });
-
-    return (
-      <>
-        {globals.map(({ name, style }) => (
-          <style
-            key={name}
-            data-emotion={`${registry.cache.key}-global ${name}`}
-            // eslint-disable-next-line react/no-danger
-            dangerouslySetInnerHTML={{ __html: style }}
-          />
-        ))}
-        {styles && (
-          <style
-            data-emotion={dataEmotionAttribute}
-            // eslint-disable-next-line react/no-danger
-            dangerouslySetInnerHTML={{ __html: styles }}
-          />
-        )}
-      </>
-    );
-  });
 
   return <CacheProvider value={registry.cache}>{children}</CacheProvider>;
 }
