@@ -10,8 +10,9 @@ import Label from 'src/components/label';
 import SharedTable from 'src/components/SharedTable/SharedTable';
 import { fDate } from 'src/utils/format-time';
 import { dataTable } from 'src/_mock/map/table-data';
+import { useSearchParams } from 'next/navigation';
 import { User } from 'src/types/user';
-import { ReactEventHandler, useState } from 'react';
+import { ReactEventHandler, useEffect, useState } from 'react';
 import { Card, Unstable_Grid2 as Grid, MenuItem, Select, TextField } from '@mui/material';
 // notice: in real scenario we will use requests to get data from back-end
 // ----------------------------------------------------------------------
@@ -33,12 +34,13 @@ const TABLE_HEAD = [
 ];
 export default function OneView() {
   const settings = useSettingsContext();
+  const searchParams = useSearchParams();
   const [searchByName, setSearchByName] = useState('');
   const [searchByUnits, setSearchByUnits] = useState('');
   const [searchPhone, setSearchByPhone] = useState('');
   const [searchStatus, setSearchByStatus] = useState('all');
   const [data_Table, SetDate_table] = useState(dataTable);
-
+  const [dataToShow, setDateToShow] = useState(dataTable.slice(0,5))
   // notice: in real scenario we will use filters from back-end
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>, p_name: string = 'legal_name') => {
     const { name, value } = event.target
@@ -86,6 +88,21 @@ export default function OneView() {
     }
 
   }
+  const page = Number(searchParams.get('page')) || 1;
+  const limit = Number(searchParams.get('limit')) || 5;
+  const totalPages = Math.ceil(data_Table.length / limit);
+
+  useEffect(() => {
+    // Prevent page from exceeding total pages
+    const adjustedPage = Math.min(page, totalPages);
+
+    const startIndex = (adjustedPage - 1) * limit;
+    const endIndex = startIndex + limit;
+    const newDataToShow = data_Table.slice(startIndex, endIndex);
+    setDateToShow(newDataToShow);
+  }, [page, limit, data_Table, totalPages]);
+
+
   return (
     <Container maxWidth={settings.themeStretch ? false : 'xl'}>
       <Typography sx={{ my: 3 }} variant="h4"> Users </Typography>
@@ -133,14 +150,11 @@ export default function OneView() {
           </Grid>
 
         </Grid>
-
-
       </Card>
       <Card>
-
         <SharedTable
           count={data_Table.length}
-          data={data_Table}
+          data={dataToShow}
           tableHead={TABLE_HEAD}
           actions={[
             {
@@ -148,8 +162,6 @@ export default function OneView() {
               icon: 'solar:eye-bold',
               onClick: (item) => console.log('here'),
             },
-
-
           ]}
           customRender={{
             record_status: (item: User) => (
