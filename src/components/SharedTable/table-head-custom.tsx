@@ -12,7 +12,7 @@ type Props = {
 
 export default function TableHeadCustom({ headLabel }: Props) {
   return (
-    <TableHead>
+    <TableHead sx={{whiteSpace:"nowrap"}}>
       <TableRow>
         {headLabel.map((headCell) => (
           <TableCell

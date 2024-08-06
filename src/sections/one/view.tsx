@@ -11,8 +11,8 @@ import SharedTable from 'src/components/SharedTable/SharedTable';
 import { fDate } from 'src/utils/format-time';
 import { dataTable } from 'src/_mock/map/table-data';
 import { User } from 'src/types/user';
-import { useState } from 'react';
-import { Card } from '@mui/material';
+import { ReactEventHandler, useState } from 'react';
+import { Card, Unstable_Grid2 as Grid, MenuItem, Select, TextField } from '@mui/material';
 // notice: in real scenario we will use requests to get data from back-end
 // ----------------------------------------------------------------------
 
@@ -33,14 +33,114 @@ const TABLE_HEAD = [
 ];
 export default function OneView() {
   const settings = useSettingsContext();
+  const [searchByName, setSearchByName] = useState('');
+  const [searchByUnits, setSearchByUnits] = useState('');
+  const [searchPhone, setSearchByPhone] = useState('');
+  const [searchStatus, setSearchByStatus] = useState('all');
+  const [data_Table, SetDate_table] = useState(dataTable);
+
+  // notice: in real scenario we will use filters from back-end
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>, p_name: string = 'legal_name') => {
+    const { name, value } = event.target
+    switch (name) {
+      case 'searchByName':
+        setSearchByName(value);
+        break;
+      case 'searchByUnits':
+        setSearchByUnits(value);
+        break;
+      case 'searchPhone':
+        setSearchByPhone(value);
+        break;
+      case 'searchStatus':
+        setSearchByStatus(value);
+        break;
+      default:
+        break;
+    }
+
+    if (p_name !== 'record_status') {
+      const filteredData = data_Table.filter((item: any) => String(item[p_name]).toLowerCase().includes(value.toLowerCase()))
+      if (value === '') {
+        setSearchByName('');
+        setSearchByUnits('');
+        setSearchByPhone('');
+        setSearchByStatus('all')
+        SetDate_table(dataTable);
+      } else {
+
+        SetDate_table(filteredData)
+      }
+    }else {
+      const filteredData = dataTable.filter((item: any) => String(item[p_name]).toLowerCase().includes(value.toLowerCase()))
+      if (value === 'all') {
+        SetDate_table(dataTable)
+        setSearchByName('');
+        setSearchByUnits('');
+        setSearchByPhone('');
+      } else {
+        SetDate_table(filteredData)
+      }
+      setSearchByStatus(value)
+
+    }
+
+  }
   return (
     <Container maxWidth={settings.themeStretch ? false : 'xl'}>
-      <Typography sx={{ my: 3 }} variant="h4"> Page One </Typography>
+      <Typography sx={{ my: 3 }} variant="h4"> Users </Typography>
+      <Card sx={{ my: 3, p: 2 }}>
+
+        <Grid container spacing={3} justifyContent="center" alignItems="center">
+          <Grid xs={6} md={3}>
+            <TextField
+              placeholder="Legal name"
+              name="searchByName"
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChange(e, 'legal_name')}
+              value={searchByName}
+            />
+          </Grid>
+          <Grid xs={6} md={3}>
+            <TextField
+
+              placeholder="Units"
+              name="searchByUnits"
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChange(e, 'power_units')}
+              value={searchByUnits}
+            />
+          </Grid>
+          <Grid xs={6} md={3}>
+            <TextField
+              placeholder="phone"
+              name="searchPhone"
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChange(e, 'phone')}
+              value={searchPhone}
+            />
+          </Grid>
+          <Grid xs={6} md={3}>
+            <Select
+
+
+              sx={{width:'100%'}}
+              value={searchStatus}
+              placeholder="Status"
+              onChange={(e:any) => handleChange(e, 'record_status')}
+            >
+              <MenuItem value="all">All</MenuItem>
+              <MenuItem value={'active'}>Active</MenuItem>
+              <MenuItem value={'null'}>Inactive</MenuItem>
+            </Select>
+          </Grid>
+
+        </Grid>
+
+
+      </Card>
       <Card>
 
         <SharedTable
-          count={dataTable.length}
-          data={dataTable}
+          count={data_Table.length}
+          data={data_Table}
           tableHead={TABLE_HEAD}
           actions={[
             {
@@ -61,7 +161,7 @@ export default function OneView() {
                     'warning'
                   }
                 >
-                  {item?.record_status ==="active" ? "active": "Inactive"}
+                  {item?.record_status === "active" ? "active" : "Inactive"}
                 </Label>
               )
             ),
