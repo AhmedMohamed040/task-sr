@@ -37,6 +37,7 @@ export default function SharedTable<T extends { id: string }>({
       : Number(searchParams.get('page')) - 1
     : 0;
   const limit = Number(searchParams.get('limit')) || 5;
+   const totalPages = Math.ceil(count / limit)
   return (
     <Box>
       <TableContainer sx={{ position: 'relative', overflow: 'unset' }}>
@@ -68,7 +69,7 @@ export default function SharedTable<T extends { id: string }>({
       {!disablePagination && (
         <TablePaginationCustom
           count={count}
-          page={page}
+          page={page }
           rowsPerPage={limit}
           onPageChange={table.onChangePage!}
           onRowsPerPageChange={table.onChangeRowsPerPage!}
